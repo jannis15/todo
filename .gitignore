@@ -1,3 +1,7 @@
+# git files
+.env
+.env.local
+
 # Flutter-specific files
 *.g.dart
 *.freezed.dart
