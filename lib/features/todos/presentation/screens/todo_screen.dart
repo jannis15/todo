@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago_flutter/timeago_flutter.dart';
-import 'package:workout/features/workout/data/sources/drift/database.dart';
-import 'package:workout/features/workout/domain/models/todo_models.dart';
-import 'package:workout/features/workout/presentation/components/buttons.dart';
-import 'package:workout/features/workout/presentation/components/dropdown_sort_button.dart';
-import 'package:workout/features/workout/presentation/providers/todo_cubit.dart';
-import 'package:workout/features/workout/presentation/screens/todo_categories_bottom_sheet.dart';
-import 'package:workout/features/workout/presentation/screens/todo_detail_screen.dart';
-import 'package:workout/features/workout/presentation/screens/todo_login_screen.dart';
-import 'package:workout/features/workout/presentation/states/todo_state.dart';
-import 'package:workout/utils/flutter/alert_dialog.dart';
-import 'package:workout/utils/flutter/utils.dart';
+import 'package:workout/features/todos/data/sources/drift/database.dart';
+import 'package:workout/features/todos/domain/models/todo_models.dart';
+import 'package:workout/core/components/buttons.dart';
+import 'package:workout/core/components/dropdown_sort_button.dart';
+import 'package:workout/features/todos/presentation/providers/todo_cubit.dart';
+import 'package:workout/features/todos/presentation/screens/todo_categories_bottom_sheet.dart';
+import 'package:workout/features/todos/presentation/screens/todo_detail_screen.dart';
+import 'package:workout/features/settings/presentation/screens/login_screen.dart';
+import 'package:workout/features/settings/presentation/screens/user_screen.dart';
+import 'package:workout/features/todos/presentation/states/todo_state.dart';
+import 'package:workout/core/utils/flutter/alert_dialog.dart';
+import 'package:workout/core/utils/flutter/utils.dart';
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});
@@ -243,6 +244,8 @@ class _TodoScreenState extends State<TodoScreen> {
       },
     );
 
+    bool isSignedIn() => !(Supabase.instance.client.auth.currentSession?.isExpired ?? true);
+
     return BlocProvider(
       create: (_) => TodoCubit(),
       child: BlocBuilder<TodoCubit, TodoState>(
@@ -253,25 +256,26 @@ class _TodoScreenState extends State<TodoScreen> {
                 toolbarHeight: 40,
                 title: const Text('Todos'),
                 actions: [
-                  TOutlinedButton(
-                    iconData:
-                        Supabase.instance.client.auth.currentSession?.isExpired ?? true
-                            ? null
-                            : Icons.person,
-                    text:
-                        Supabase.instance.client.auth.currentSession?.isExpired ?? true
-                            ? 'Login'
-                            : Supabase.instance.client.auth.currentUser?.email,
-                    onPressed:
-                        Supabase.instance.client.auth.currentSession?.isExpired ?? true
-                            ? () {
-                              Navigator.of(
-                                context,
-                              ).push(MaterialPageRoute(builder: (_) => const TodoLoginScreen()));
-                            }
-                            : // TODO
-                            null,
-                  ),
+                  if (isSignedIn())
+                    TOutlinedButton(
+                      iconData: Icons.person,
+                      text: Supabase.instance.client.auth.currentUser?.email,
+                      onPressed: () {
+                        Navigator.of(
+                          context,
+                        ).push(MaterialPageRoute(builder: (_) => const UserScreen()));
+                      },
+                    )
+                  else
+                    TOutlinedButton(
+                      iconData: null,
+                      text: 'Login',
+                      onPressed: () {
+                        Navigator.of(
+                          context,
+                        ).push(MaterialPageRoute(builder: (_) => const LoginScreen()));
+                      },
+                    ),
                 ],
               ),
               floatingActionButton: buildFloatingActionButton(),

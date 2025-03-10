@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workout/features/workout/data/sources/drift/database.dart';
-import 'package:workout/features/workout/domain/models/todo_models.dart';
-import 'package:workout/features/workout/domain/utils/todo_filter_sort_utils.dart';
-import 'package:workout/features/workout/presentation/states/todo_state.dart';
-import 'package:workout/utils/dart/sort_utils.dart';
+import 'package:workout/features/todos/data/sources/drift/database.dart';
+import 'package:workout/features/todos/domain/models/todo_models.dart';
+import 'package:workout/features/todos/domain/utils/todo_filter_sort_utils.dart';
+import 'package:workout/features/todos/presentation/states/todo_state.dart';
+import 'package:workout/core/utils/dart/sort_utils.dart';
 
 class TodoCubit extends Cubit<TodoState> {
   late final StreamSubscription<List<Todo>> _todosSub;

@@ -4,10 +4,12 @@ part 'todo_models.freezed.dart';
 
 enum TodoSort {
   recency,
+  creationDate,
   categoryName;
 
   String get label => switch (this) {
     TodoSort.recency => 'Recency',
+    TodoSort.creationDate => 'Creation',
     TodoSort.categoryName => 'Category',
   };
 }

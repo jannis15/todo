@@ -1,5 +1,5 @@
-import 'package:workout/features/workout/domain/models/todo_models.dart';
-import 'package:workout/utils/dart/sort_utils.dart';
+import 'package:workout/features/todos/domain/models/todo_models.dart';
+import 'package:workout/core/utils/dart/sort_utils.dart';
 
 abstract class TodoFilterSortUtils {
   static List<Todo> filterTodosByCategories(
@@ -22,6 +22,10 @@ abstract class TodoFilterSortUtils {
         final aEditedAt = a.editedAt ?? DateTime(0);
         final bEditedAt = b.editedAt ?? DateTime(0);
         comparison = aEditedAt.compareTo(bEditedAt);
+      } else if (sort == TodoSort.creationDate) {
+        final aCreatedAt = a.createdAt ?? DateTime(0);
+        final bCreatedAt = b.createdAt ?? DateTime(0);
+        comparison = aCreatedAt.compareTo(bCreatedAt);
       } else if (sort == TodoSort.categoryName) {
         comparison =
             a.categories.isEmpty

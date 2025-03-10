@@ -5,9 +5,9 @@ import 'package:drift/native.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:workout/features/workout/domain/models/todo_models.dart';
-import 'package:workout/features/workout/domain/utils/todo_filter_sort_utils.dart';
-import 'package:workout/utils/dart/sort_utils.dart';
+import 'package:workout/features/todos/domain/models/todo_models.dart';
+import 'package:workout/features/todos/domain/utils/todo_filter_sort_utils.dart';
+import 'package:workout/core/utils/dart/sort_utils.dart';
 
 part 'database.g.dart';
 

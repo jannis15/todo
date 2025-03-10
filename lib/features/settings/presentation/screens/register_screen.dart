@@ -1,20 +1,21 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:workout/features/settings/data/sources/shared_preferences/settings_service.dart';
-import 'package:workout/features/settings/domain/models/settings.dart';
-import 'package:workout/features/workout/presentation/components/buttons.dart';
-import 'package:workout/features/workout/presentation/screens/todo_login_screen.dart';
-import 'package:workout/utils/flutter/utils.dart';
+import 'package:workout/features/settings/presentation/providers/settings_cubit.dart';
+import 'package:workout/features/settings/presentation/states/settings.dart';
+import 'package:workout/core/components/buttons.dart';
+import 'package:workout/features/settings/presentation/screens/login_screen.dart';
+import 'package:workout/core/utils/flutter/utils.dart';
 
-class TodoRegisterScreen extends StatefulWidget {
-  const TodoRegisterScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<TodoRegisterScreen> createState() => _TodoRegisterScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _TodoRegisterScreenState extends State<TodoRegisterScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   bool _isObscured = true;
   bool _isLoading = false;
   final TextEditingController _emailController = TextEditingController();
@@ -46,7 +47,7 @@ class _TodoRegisterScreenState extends State<TodoRegisterScreen> {
         Supabase.instance.client.auth.signUp(email: email, password: password),
       );
       final response = await _registerOperation!.value;
-      await SettingsService.saveLoginInformation(
+      await context.read<SettingsCubit>().saveLoginInformation(
         LoginInformation(email: email, password: password),
       );
     } finally {
@@ -132,7 +133,7 @@ class _TodoRegisterScreenState extends State<TodoRegisterScreen> {
                   child: InkWell(
                     onTap: () {
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => const TodoLoginScreen()),
+                        MaterialPageRoute(builder: (context) => const LoginScreen()),
                       );
                     },
                     child: Padding(

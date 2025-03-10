@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workout/config/config.dart';
-import 'package:workout/utils/flutter/utils.dart';
+import 'package:workout/core/utils/flutter/utils.dart';
 
 class TChip extends StatefulWidget {
   final IconData? iconData;

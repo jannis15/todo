@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:workout/features/workout/data/sources/drift/database.dart';
-import 'package:workout/features/workout/domain/models/todo_models.dart';
-import 'package:workout/features/workout/presentation/components/chip.dart';
-import 'package:workout/utils/flutter/alert_dialog.dart';
-import 'package:workout/utils/flutter/utils.dart';
+import 'package:workout/features/todos/data/sources/drift/database.dart';
+import 'package:workout/features/todos/domain/models/todo_models.dart';
+import 'package:workout/core/components/chip.dart';
+import 'package:workout/core/utils/flutter/alert_dialog.dart';
+import 'package:workout/core/utils/flutter/utils.dart';
 
 class TodoDetailScreen extends StatefulWidget {
   final Todo? todo;
@@ -332,6 +332,7 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
             title: _titleTextController.text.trim(),
             content: _contentTextController.text.trim(),
             categories: _selectedCategories,
+            createdAt: widget.todo?.createdAt,
           );
           if (_titleTextController.text.isNotEmpty || _contentTextController.text.isNotEmpty) {
             await AppDatabase().saveTodo(todo);
