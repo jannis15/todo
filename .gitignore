@@ -1,0 +1,66 @@
+# Flutter-specific files
+*.g.dart
+*.freezed.dart
+*.mocks.dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+pubspec.lock
+
+# Android
+android/.gradle/
+android/app/debug.keystore
+
+# iOS
+ios/.generated/
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.podspec
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+xcuserdata/
+*.xcworkspace
+*.xcodeproj/project.xcworkspace/
+
+# macOS
+macos/.flutter-plugins
+macos/.flutter-plugins-dependencies
+macos/Pods/
+macos/.symlinks/
+macos/Flutter/ephemeral/
+macos/Flutter/Flutter.podspec
+
+# Windows
+windows/flutter/ephemeral/
+windows/CMakeCache.txt
+
+# Web
+web/.dart_tool/
+web/build/
+web/.firebase/
+
+# Linux
+linux/flutter/ephemeral/
+linux/build/
+
+# VS Code
+.vscode/
+
+# JetBrains IDEs (Android Studio, IntelliJ)
+.idea/
+*.iml
+
+# Logs & Temporary Files
+*.log
+*.tmp
+*.swp
+*.swo
+*.DS_Store
+
+# Metadata files
+.metadata
+
+# FVM Version Cache
+.fvm/
