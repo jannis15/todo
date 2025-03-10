@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago_flutter/timeago_flutter.dart';
 import 'package:workout/features/workout/data/sources/drift/database.dart';
 import 'package:workout/features/workout/domain/models/todo_models.dart';
+import 'package:workout/features/workout/presentation/components/buttons.dart';
 import 'package:workout/features/workout/presentation/components/dropdown_sort_button.dart';
 import 'package:workout/features/workout/presentation/providers/todo_cubit.dart';
 import 'package:workout/features/workout/presentation/screens/todo_categories_bottom_sheet.dart';
 import 'package:workout/features/workout/presentation/screens/todo_detail_screen.dart';
+import 'package:workout/features/workout/presentation/screens/todo_login_screen.dart';
 import 'package:workout/features/workout/presentation/states/todo_state.dart';
 import 'package:workout/utils/flutter/alert_dialog.dart';
 import 'package:workout/utils/flutter/utils.dart';
@@ -246,9 +249,30 @@ class _TodoScreenState extends State<TodoScreen> {
         builder:
             (context, todoState) => Scaffold(
               appBar: AppBar(
+                actionsPadding: const EdgeInsets.only(right: 8),
                 toolbarHeight: 40,
                 title: const Text('Todos'),
-                // actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.settings))],
+                actions: [
+                  TOutlinedButton(
+                    iconData:
+                        Supabase.instance.client.auth.currentSession?.isExpired ?? true
+                            ? null
+                            : Icons.person,
+                    text:
+                        Supabase.instance.client.auth.currentSession?.isExpired ?? true
+                            ? 'Login'
+                            : Supabase.instance.client.auth.currentUser?.email,
+                    onPressed:
+                        Supabase.instance.client.auth.currentSession?.isExpired ?? true
+                            ? () {
+                              Navigator.of(
+                                context,
+                              ).push(MaterialPageRoute(builder: (_) => const TodoLoginScreen()));
+                            }
+                            : // TODO
+                            null,
+                  ),
+                ],
               ),
               floatingActionButton: buildFloatingActionButton(),
               body:
