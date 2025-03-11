@@ -6,8 +6,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:workout/features/settings/presentation/providers/settings_cubit.dart';
 import 'package:workout/features/settings/presentation/states/settings.dart';
 import 'package:workout/core/components/buttons.dart';
-import 'package:workout/features/settings/presentation/screens/forgot_password_screen.dart';
-import 'package:workout/features/settings/presentation/screens/register_screen.dart';
 import 'package:workout/core/utils/flutter/utils.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -51,6 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await context.read<SettingsCubit>().saveLoginInformation(
           LoginInformation(email: email, password: password),
         );
+        if (mounted) context.go('/');
       } finally {
         if (mounted)
           setState(() {

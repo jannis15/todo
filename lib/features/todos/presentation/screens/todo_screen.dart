@@ -10,8 +10,6 @@ import 'package:workout/core/components/dropdown_sort_button.dart';
 import 'package:workout/features/todos/presentation/providers/todo_cubit.dart';
 import 'package:workout/features/todos/presentation/screens/todo_categories_bottom_sheet.dart';
 import 'package:workout/features/todos/presentation/screens/todo_detail_screen.dart';
-import 'package:workout/features/settings/presentation/screens/login_screen.dart';
-import 'package:workout/features/settings/presentation/screens/account_screen.dart';
 import 'package:workout/features/todos/presentation/states/todo_state.dart';
 import 'package:workout/core/utils/flutter/alert_dialog.dart';
 import 'package:workout/core/utils/flutter/utils.dart';
@@ -24,6 +22,7 @@ class TodoScreen extends StatefulWidget {
 }
 
 class _TodoScreenState extends State<TodoScreen> {
+  final Stream<AuthState> _authStream = Supabase.instance.client.auth.onAuthStateChange;
   final ScrollController _listViewScrollController = ScrollController();
   final FocusNode _searchFocusNode = FocusNode();
   final TextEditingController _searchTextController = TextEditingController();
@@ -245,37 +244,41 @@ class _TodoScreenState extends State<TodoScreen> {
       },
     );
 
-    bool isSignedIn() => !(Supabase.instance.client.auth.currentSession?.isExpired ?? true);
-
     return BlocProvider(
       create: (_) => TodoCubit(),
       child: BlocBuilder<TodoCubit, TodoState>(
         builder:
-            (context, todoState) => Scaffold(
-              appBar: AppBar(
-                actionsPadding: const EdgeInsets.only(right: 8),
-                toolbarHeight: 40,
-                title: const Text('Todos'),
-                actions: [
-                  if (isSignedIn())
-                    TOutlinedButton(
-                      iconData: Icons.person,
-                      text: Supabase.instance.client.auth.currentUser?.email,
-                      onPressed: () => context.go('/account'),
-                    )
-                  else
-                    TOutlinedButton(
-                      iconData: null,
-                      text: 'Login',
-                      onPressed: () => context.go('/login'),
-                    ),
-                ],
-              ),
-              floatingActionButton: buildFloatingActionButton(),
-              body:
-                  todoState is TodoLoadedState
-                      ? buildLoadedBody(context, todoState)
-                      : const Center(child: CircularProgressIndicator()),
+            (context, todoState) => StreamBuilder(
+              stream: _authStream,
+              builder: (context, authState) {
+                bool isSignedIn = !(authState.data?.session?.isExpired ?? true);
+                return Scaffold(
+                  appBar: AppBar(
+                    actionsPadding: const EdgeInsets.only(right: 8),
+                    toolbarHeight: 40,
+                    title: const Text('Todos'),
+                    actions: [
+                      if (isSignedIn)
+                        TOutlinedButton(
+                          iconData: Icons.person,
+                          text: Supabase.instance.client.auth.currentUser?.email,
+                          onPressed: () => context.go('/account'),
+                        )
+                      else
+                        TOutlinedButton(
+                          iconData: null,
+                          text: 'Login',
+                          onPressed: () => context.go('/login'),
+                        ),
+                    ],
+                  ),
+                  floatingActionButton: buildFloatingActionButton(),
+                  body:
+                      todoState is TodoLoadedState
+                          ? buildLoadedBody(context, todoState)
+                          : const Center(child: CircularProgressIndicator()),
+                );
+              },
             ),
       ),
     );

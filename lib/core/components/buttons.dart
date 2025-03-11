@@ -14,6 +14,7 @@ class TButton extends StatelessWidget {
   final Color? backgroundColor;
   final TextDecoration? textDecoration;
   final HighlightType highlightType;
+  final String? tooltip;
 
   final TButtonType type;
 
@@ -28,6 +29,7 @@ class TButton extends StatelessWidget {
     this.backgroundColor,
     this.textDecoration,
     this.highlightType = HighlightType.primary,
+    this.tooltip,
   });
 
   @override
@@ -65,59 +67,62 @@ class TButton extends StatelessWidget {
             ? Color.alphaBlend(colorScheme.surface.withValues(alpha: .5), colorScheme.outline)
             : colorScheme.outline;
 
-    return IgnorePointer(
-      ignoring: loading,
-      child: SizedBox(
-        height: AppSizes.kComponentHeight,
-        child: FilledButton(
-          onPressed: loading ? null : onPressed,
-          style: ButtonStyle(
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            visualDensity: VisualDensity.compact,
-            side:
-                type == TButtonType.outlined
-                    ? WidgetStatePropertyAll(BorderSide(width: 1, color: getBorderColor()))
-                    : null,
-            overlayColor:
-                type != TButtonType.filled
-                    ? WidgetStatePropertyAll(getForegroundColor().withValues(alpha: .5))
-                    : null,
-            foregroundColor: WidgetStatePropertyAll(getForegroundColor()),
-            backgroundColor: WidgetStatePropertyAll(getBackgroundColor()),
-            padding: WidgetStatePropertyAll(
-              EdgeInsets.fromLTRB(
-                AppSizes.kGap,
-                0,
-                iconData != null && text != null ? AppSizes.kMediumBigGap : AppSizes.kGap,
-                0,
+    return Tooltip(
+      message: tooltip ?? '',
+      child: IgnorePointer(
+        ignoring: loading,
+        child: SizedBox(
+          height: AppSizes.kComponentHeight,
+          child: FilledButton(
+            onPressed: loading ? null : onPressed,
+            style: ButtonStyle(
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              visualDensity: VisualDensity.compact,
+              side:
+                  type == TButtonType.outlined
+                      ? WidgetStatePropertyAll(BorderSide(width: 1, color: getBorderColor()))
+                      : null,
+              overlayColor:
+                  type != TButtonType.filled
+                      ? WidgetStatePropertyAll(getForegroundColor().withValues(alpha: .5))
+                      : null,
+              foregroundColor: WidgetStatePropertyAll(getForegroundColor()),
+              backgroundColor: WidgetStatePropertyAll(getBackgroundColor()),
+              padding: WidgetStatePropertyAll(
+                EdgeInsets.fromLTRB(
+                  AppSizes.kGap,
+                  0,
+                  iconData != null && text != null ? AppSizes.kMediumBigGap : AppSizes.kGap,
+                  0,
+                ),
               ),
             ),
-          ),
-          child: Row(
-            spacing: AppSizes.kSmallGap,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (loading)
-                SizedBox(
-                  height: AppSizes.kSubIconSize / 2,
-                  width: AppSizes.kSubIconSize / 2,
-                  child: CircularProgressIndicator(strokeWidth: 1, color: getForegroundColor()),
-                )
-              else if (iconData != null)
-                SizedBox(
-                  width: AppSizes.kSubIconSize,
-                  child: Icon(iconData, size: AppSizes.kSubIconSize, color: getForegroundColor()),
-                ),
-              if (text != null)
-                Text(
-                  text!,
-                  style: textTheme.labelLarge?.copyWith(
-                    color: getForegroundColor(),
-                    decoration: textDecoration,
+            child: Row(
+              spacing: AppSizes.kSmallGap,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (loading)
+                  SizedBox(
+                    height: AppSizes.kSubIconSize / 2,
+                    width: AppSizes.kSubIconSize / 2,
+                    child: CircularProgressIndicator(strokeWidth: 1, color: getForegroundColor()),
+                  )
+                else if (iconData != null)
+                  SizedBox(
+                    width: AppSizes.kSubIconSize,
+                    child: Icon(iconData, size: AppSizes.kSubIconSize, color: getForegroundColor()),
                   ),
-                ),
-            ],
+                if (text != null)
+                  Text(
+                    text!,
+                    style: textTheme.labelLarge?.copyWith(
+                      color: getForegroundColor(),
+                      decoration: textDecoration,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -135,6 +140,7 @@ class TTransparentButton extends TButton {
     super.textDecoration,
     super.loading,
     super.highlightType,
+    super.tooltip,
   }) : super(type: TButtonType.transparent);
 }
 
@@ -147,6 +153,7 @@ class TOutlinedButton extends TButton {
     super.textDecoration,
     super.loading,
     super.highlightType,
+    super.tooltip,
   }) : super(type: TButtonType.outlined);
 }
 
@@ -159,5 +166,6 @@ class TFilledButton extends TButton {
     super.textDecoration,
     super.loading,
     super.highlightType,
+    super.tooltip,
   }) : super(type: TButtonType.filled);
 }

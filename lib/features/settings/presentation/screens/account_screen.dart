@@ -24,7 +24,36 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(toolbarHeight: 40, title: const Text('Account Settings')),
+      appBar: AppBar(
+        toolbarHeight: 40,
+        title: const Text('Account Settings'),
+        actionsPadding: const EdgeInsets.only(right: 8),
+        actions: [
+          TOutlinedButton(
+            tooltip: 'Logout',
+            iconData: Icons.logout,
+            loading: _isSaving,
+            onPressed: () async {
+              setState(() {
+                _isSaving = true;
+              });
+              try {
+                await _signOutOperation?.cancel();
+                _signOutOperation = CancelableOperation.fromFuture(
+                  Supabase.instance.client.auth.signOut(),
+                );
+                await _signOutOperation!.value;
+                if (mounted) context.go('/');
+              } finally {
+                if (mounted)
+                  setState(() {
+                    _isSaving = false;
+                  });
+              }
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8),
         child: Column(
@@ -35,7 +64,13 @@ class _AccountScreenState extends State<AccountScreen> {
               iconData: Icons.sync,
               text: 'Synchronise',
               highlightType: HighlightType.secondary,
-              onPressed: () {},
+              // onPressed: () {},
+            ),
+            TFilledButton(
+              iconData: Icons.settings_backup_restore,
+              text: 'Recover',
+              highlightType: HighlightType.secondary,
+              // onPressed: () {},
             ),
             TFilledButton(
               iconData: Icons.lock,
@@ -43,29 +78,6 @@ class _AccountScreenState extends State<AccountScreen> {
               highlightType: HighlightType.secondary,
               onPressed: () {
                 context.go('/new-password');
-              },
-            ),
-            TOutlinedButton(
-              iconData: Icons.logout,
-              text: 'Logout',
-              loading: _isSaving,
-              onPressed: () async {
-                setState(() {
-                  _isSaving = true;
-                });
-                try {
-                  await _signOutOperation?.cancel();
-                  _signOutOperation = CancelableOperation.fromFuture(
-                    Supabase.instance.client.auth.signOut(),
-                  );
-                  await _signOutOperation!.value;
-                  if (mounted) Navigator.of(context).pop();
-                } finally {
-                  if (mounted)
-                    setState(() {
-                      _isSaving = false;
-                    });
-                }
               },
             ),
           ],
