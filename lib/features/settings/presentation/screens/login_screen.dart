@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:workout/features/settings/presentation/providers/settings_cubit.dart';
 import 'package:workout/features/settings/presentation/states/settings.dart';
@@ -100,18 +101,12 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 TTransparentButton(
                   text: 'Forgot password?',
-                  onPressed:
-                      () => Navigator.of(
-                        context,
-                      ).push(MaterialPageRoute(builder: (context) => const ForgotPasswordScreen())),
+                  onPressed: () => context.go('/login/forgot-password'),
                   foregroundColor: colorScheme.outline,
                 ),
                 TTransparentButton(
                   text: 'Create an account',
-                  onPressed:
-                      () => Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => const RegisterScreen()),
-                      ),
+                  onPressed: () => context.go('/register'),
                   foregroundColor: colorScheme.outline,
                 ),
               ],

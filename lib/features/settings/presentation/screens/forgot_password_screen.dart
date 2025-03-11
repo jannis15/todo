@@ -11,6 +11,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  bool _isLoading = false;
   CancelableOperation<void>? _forgotPasswordOperation;
   final TextEditingController _emailController = TextEditingController();
 
@@ -40,19 +41,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ),
             ),
             TFilledButton(
-              loading: !(_forgotPasswordOperation?.isCompleted ?? true),
+              loading: _isLoading,
               onPressed: () async {
-                final email = _emailController.text.trim();
-                _forgotPasswordOperation?.cancel();
-                _forgotPasswordOperation = CancelableOperation.fromFuture(
-                  Supabase.instance.client.auth.resetPasswordForEmail(email),
-                );
-                if (mounted) setState(() {});
-                await _forgotPasswordOperation!.value;
-                if (mounted) setState(() {});
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("We've sent you a reset password link!")),
-                );
+                setState(() {
+                  _isLoading = true;
+                });
+                try {
+                  final email = _emailController.text.trim();
+                  _forgotPasswordOperation?.cancel();
+                  _forgotPasswordOperation = CancelableOperation.fromFuture(
+                    Supabase.instance.client.auth.resetPasswordForEmail(email),
+                  );
+                  await _forgotPasswordOperation!.value;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("We've sent you a reset password link!")),
+                  );
+                } finally {
+                  if (mounted)
+                    setState(() {
+                      _isLoading = false;
+                    });
+                }
               },
               text: 'Reset password',
             ),

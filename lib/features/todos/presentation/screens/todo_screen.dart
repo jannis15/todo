@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago_flutter/timeago_flutter.dart';
 import 'package:workout/features/todos/data/sources/drift/database.dart';
@@ -10,7 +11,7 @@ import 'package:workout/features/todos/presentation/providers/todo_cubit.dart';
 import 'package:workout/features/todos/presentation/screens/todo_categories_bottom_sheet.dart';
 import 'package:workout/features/todos/presentation/screens/todo_detail_screen.dart';
 import 'package:workout/features/settings/presentation/screens/login_screen.dart';
-import 'package:workout/features/settings/presentation/screens/user_screen.dart';
+import 'package:workout/features/settings/presentation/screens/account_screen.dart';
 import 'package:workout/features/todos/presentation/states/todo_state.dart';
 import 'package:workout/core/utils/flutter/alert_dialog.dart';
 import 'package:workout/core/utils/flutter/utils.dart';
@@ -260,21 +261,13 @@ class _TodoScreenState extends State<TodoScreen> {
                     TOutlinedButton(
                       iconData: Icons.person,
                       text: Supabase.instance.client.auth.currentUser?.email,
-                      onPressed: () {
-                        Navigator.of(
-                          context,
-                        ).push(MaterialPageRoute(builder: (_) => const UserScreen()));
-                      },
+                      onPressed: () => context.go('/account'),
                     )
                   else
                     TOutlinedButton(
                       iconData: null,
                       text: 'Login',
-                      onPressed: () {
-                        Navigator.of(
-                          context,
-                        ).push(MaterialPageRoute(builder: (_) => const LoginScreen()));
-                      },
+                      onPressed: () => context.go('/login'),
                     ),
                 ],
               ),

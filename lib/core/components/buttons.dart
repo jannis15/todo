@@ -3,6 +3,8 @@ import 'package:workout/config/config.dart';
 
 enum TButtonType { filled, outlined, transparent }
 
+enum HighlightType { primary, secondary }
+
 class TButton extends StatelessWidget {
   final bool loading;
   final IconData? iconData;
@@ -11,6 +13,7 @@ class TButton extends StatelessWidget {
   final Color? foregroundColor;
   final Color? backgroundColor;
   final TextDecoration? textDecoration;
+  final HighlightType highlightType;
 
   final TButtonType type;
 
@@ -24,13 +27,18 @@ class TButton extends StatelessWidget {
     this.foregroundColor,
     this.backgroundColor,
     this.textDecoration,
+    this.highlightType = HighlightType.primary,
   });
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final baseBackgroundColor = backgroundColor ?? colorScheme.primaryContainer;
+    final baseBackgroundColor =
+        backgroundColor ??
+        (highlightType == HighlightType.primary
+            ? colorScheme.primaryContainer
+            : colorScheme.secondaryContainer);
 
     Color getBackgroundColor() =>
         type == TButtonType.filled
@@ -43,7 +51,9 @@ class TButton extends StatelessWidget {
           foregroundColor != null
               ? foregroundColor!
               : type == TButtonType.filled
-              ? colorScheme.onPrimaryContainer
+              ? (highlightType == HighlightType.primary
+                  ? colorScheme.onPrimaryContainer
+                  : colorScheme.onSecondaryContainer)
               : colorScheme.onSurface;
       return onPressed == null
           ? Color.alphaBlend(colorScheme.surface.withValues(alpha: .5), calcForegroundColor)
@@ -124,6 +134,7 @@ class TTransparentButton extends TButton {
     super.onPressed,
     super.textDecoration,
     super.loading,
+    super.highlightType,
   }) : super(type: TButtonType.transparent);
 }
 
@@ -135,6 +146,7 @@ class TOutlinedButton extends TButton {
     super.onPressed,
     super.textDecoration,
     super.loading,
+    super.highlightType,
   }) : super(type: TButtonType.outlined);
 }
 
@@ -146,5 +158,6 @@ class TFilledButton extends TButton {
     super.onPressed,
     super.textDecoration,
     super.loading,
+    super.highlightType,
   }) : super(type: TButtonType.filled);
 }

@@ -24,6 +24,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   shared_preferences: ^2.5.2
   async: ^2.12.0
+  go_router: ^14.8.1
 
 dev_dependencies:
   flutter_test:

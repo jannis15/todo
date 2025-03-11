@@ -1,16 +1,17 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:workout/core/components/buttons.dart';
 
-class UserScreen extends StatefulWidget {
-  const UserScreen({super.key});
+class AccountScreen extends StatefulWidget {
+  const AccountScreen({super.key});
 
   @override
-  State<UserScreen> createState() => _UserScreenState();
+  State<AccountScreen> createState() => _AccountScreenState();
 }
 
-class _UserScreenState extends State<UserScreen> {
+class _AccountScreenState extends State<AccountScreen> {
   CancelableOperation<void>? _signOutOperation;
   bool _isSaving = false;
 
@@ -23,12 +24,27 @@ class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(toolbarHeight: 40),
+      appBar: AppBar(toolbarHeight: 40, title: const Text('Account Settings')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: 8,
           children: [
+            TFilledButton(
+              iconData: Icons.sync,
+              text: 'Synchronise',
+              highlightType: HighlightType.secondary,
+              onPressed: () {},
+            ),
+            TFilledButton(
+              iconData: Icons.lock,
+              text: 'Change password',
+              highlightType: HighlightType.secondary,
+              onPressed: () {
+                context.go('/new-password');
+              },
+            ),
             TOutlinedButton(
               iconData: Icons.logout,
               text: 'Logout',
@@ -43,6 +59,7 @@ class _UserScreenState extends State<UserScreen> {
                     Supabase.instance.client.auth.signOut(),
                   );
                   await _signOutOperation!.value;
+                  if (mounted) Navigator.of(context).pop();
                 } finally {
                   if (mounted)
                     setState(() {

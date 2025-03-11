@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:workout/features/settings/presentation/providers/settings_cubit.dart';
 import 'package:workout/features/settings/presentation/states/settings.dart';
@@ -131,11 +132,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   clipBehavior: Clip.antiAlias,
                   shape: const StadiumBorder(),
                   child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      );
-                    },
+                    onTap: () => context.go('/login'),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
