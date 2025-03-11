@@ -125,7 +125,10 @@ class AppDatabase extends _$AppDatabase {
     ).map((category) => Category(uuid: category.uuid, categoryName: category.categoryName)).watch();
   }
 
-  Stream<List<Todo>> watchTodos({required SortDirection sortDirection, required TodoSort sort}) {
+  Stream<List<Todo>> watchTodos({
+    SortDirection sortDirection = SortDirection.descending,
+    TodoSort sort = TodoSort.recency,
+  }) {
     final query = select(tblTodos).join([
       leftOuterJoin(tblTodoCategories, tblTodos.uuid.equalsExp(tblTodoCategories.todoUuid)),
       leftOuterJoin(tblCategories, tblTodoCategories.categoryUuid.equalsExp(tblCategories.uuid)),
