@@ -1,3 +1,5 @@
+# flutter build web --no-tree-shake-icons --release
+# flutter build apk --no-tree-shake-icons --release
 name: todo
 description: ''
 publish_to: 'none'
@@ -8,12 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
   drift: ^2.25.1
   drift_flutter: ^0.2.4
   uuid: ^4.5.1
-  path: ^1.9.1
-  path_provider: ^2.1.5
   freezed: ^3.0.3
   freezed_annotation: ^3.0.0
   collection: ^1.19.1
