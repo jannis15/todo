@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:workout/features/todos/data/sources/drift/database.dart';
-import 'package:workout/features/todos/domain/models/todo_models.dart';
+import 'package:todo/features/todos/data/sources/drift/database.dart';
+import 'package:todo/features/todos/domain/models/todo_models.dart';
 
 class CloudRepository {
   final SupabaseClient supabase = Supabase.instance.client;

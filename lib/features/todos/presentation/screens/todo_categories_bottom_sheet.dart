@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:workout/features/todos/data/sources/drift/database.dart';
-import 'package:workout/features/todos/domain/models/todo_models.dart';
-import 'package:workout/core/components/chip.dart';
-import 'package:workout/features/todos/presentation/providers/todo_cubit.dart';
-import 'package:workout/features/todos/presentation/states/todo_state.dart';
-import 'package:workout/core/utils/flutter/alert_dialog.dart';
-import 'package:workout/core/utils/flutter/utils.dart';
+import 'package:todo/features/todos/data/sources/drift/database.dart';
+import 'package:todo/features/todos/domain/models/todo_models.dart';
+import 'package:todo/core/components/chip.dart';
+import 'package:todo/features/todos/presentation/providers/todo_cubit.dart';
+import 'package:todo/features/todos/presentation/states/todo_state.dart';
+import 'package:todo/core/utils/flutter/alert_dialog.dart';
+import 'package:todo/core/utils/flutter/utils.dart';
 
 class TodoCategoriesBottomSheet extends StatefulWidget {
   const TodoCategoriesBottomSheet({super.key});

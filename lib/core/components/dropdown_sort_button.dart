@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:workout/config/config.dart';
-import 'package:workout/core/utils/dart/sort_utils.dart';
-import 'package:workout/core/utils/flutter/utils.dart';
+import 'package:todo/config/config.dart';
+import 'package:todo/core/utils/dart/sort_utils.dart';
+import 'package:todo/core/utils/flutter/utils.dart';
 
 class DropdownSortButton<E> extends StatefulWidget {
   final Map<E, String> options;

@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:workout/features/todos/domain/models/todo_models.dart';
-import 'package:workout/core/utils/dart/sort_utils.dart';
+import 'package:todo/features/todos/domain/models/todo_models.dart';
+import 'package:todo/core/utils/dart/sort_utils.dart';
 
 part 'todo_state.freezed.dart';
 

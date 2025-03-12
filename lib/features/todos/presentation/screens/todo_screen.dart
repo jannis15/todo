@@ -3,16 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago_flutter/timeago_flutter.dart';
-import 'package:workout/features/todos/data/sources/drift/database.dart';
-import 'package:workout/features/todos/domain/models/todo_models.dart';
-import 'package:workout/core/components/buttons.dart';
-import 'package:workout/core/components/dropdown_sort_button.dart';
-import 'package:workout/features/todos/presentation/providers/todo_cubit.dart';
-import 'package:workout/features/todos/presentation/screens/todo_categories_bottom_sheet.dart';
-import 'package:workout/features/todos/presentation/screens/todo_detail_screen.dart';
-import 'package:workout/features/todos/presentation/states/todo_state.dart';
-import 'package:workout/core/utils/flutter/alert_dialog.dart';
-import 'package:workout/core/utils/flutter/utils.dart';
+import 'package:todo/features/todos/data/sources/drift/database.dart';
+import 'package:todo/features/todos/domain/models/todo_models.dart';
+import 'package:todo/core/components/buttons.dart';
+import 'package:todo/core/components/dropdown_sort_button.dart';
+import 'package:todo/features/todos/presentation/providers/todo_cubit.dart';
+import 'package:todo/features/todos/presentation/screens/todo_categories_bottom_sheet.dart';
+import 'package:todo/features/todos/presentation/screens/todo_detail_screen.dart';
+import 'package:todo/features/todos/presentation/states/todo_state.dart';
+import 'package:todo/core/utils/flutter/alert_dialog.dart';
+import 'package:todo/core/utils/flutter/utils.dart';
 
 class TodoScreen extends StatefulWidget {
   const TodoScreen({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:workout/config/config.dart';
+import 'package:todo/config/config.dart';
 
 enum TButtonType { filled, outlined, transparent }
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:workout/features/todos/data/sources/drift/database.dart';
-import 'package:workout/features/todos/domain/models/todo_models.dart';
-import 'package:workout/core/components/chip.dart';
-import 'package:workout/core/utils/flutter/alert_dialog.dart';
-import 'package:workout/core/utils/flutter/utils.dart';
+import 'package:todo/features/todos/data/sources/drift/database.dart';
+import 'package:todo/features/todos/domain/models/todo_models.dart';
+import 'package:todo/core/components/chip.dart';
+import 'package:todo/core/utils/flutter/alert_dialog.dart';
+import 'package:todo/core/utils/flutter/utils.dart';
 
 class TodoDetailScreen extends StatefulWidget {
   final Todo? todo;

@@ -2,8 +2,8 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:workout/core/components/buttons.dart';
-import 'package:workout/features/todos/data/repositories/cloud_repository.dart';
+import 'package:todo/core/components/buttons.dart';
+import 'package:todo/features/todos/data/repositories/cloud_repository.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});

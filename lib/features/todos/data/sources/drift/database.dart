@@ -5,9 +5,9 @@ import 'package:drift/native.dart';
 import 'package:uuid/uuid.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:workout/features/todos/domain/models/todo_models.dart';
-import 'package:workout/features/todos/domain/utils/todo_filter_sort_utils.dart';
-import 'package:workout/core/utils/dart/sort_utils.dart';
+import 'package:todo/features/todos/domain/models/todo_models.dart';
+import 'package:todo/features/todos/domain/utils/todo_filter_sort_utils.dart';
+import 'package:todo/core/utils/dart/sort_utils.dart';
 
 part 'database.g.dart';
 
@@ -79,24 +79,16 @@ class AppDatabase extends _$AppDatabase {
       await batch((batch) async {
         newCategories.forEach((category) async {
           final categoryUuid = const Uuid().v4();
-          await into(tblCategories).insert(
-            TblCategoriesCompanion(
-              uuid: Value(categoryUuid),
-              categoryName: Value(category.categoryName),
-            ),
-          );
+          await into(tblCategories).insert(TblCategoriesCompanion(uuid: Value(categoryUuid), categoryName: Value(category.categoryName)));
           category.uuid = categoryUuid;
         });
       });
 
       await batch((batch) async {
         todo.categories.forEach((category) async {
-          await into(tblTodoCategories).insertOnConflictUpdate(
-            TblTodoCategoriesCompanion(
-              todoUuid: Value(todoUuid),
-              categoryUuid: Value(category.uuid!),
-            ),
-          );
+          await into(
+            tblTodoCategories,
+          ).insertOnConflictUpdate(TblTodoCategoriesCompanion(todoUuid: Value(todoUuid), categoryUuid: Value(category.uuid!)));
         });
       });
     }
@@ -120,15 +112,10 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Stream<List<Category>> watchCategories() {
-    return select(
-      tblCategories,
-    ).map((category) => Category(uuid: category.uuid, categoryName: category.categoryName)).watch();
+    return select(tblCategories).map((category) => Category(uuid: category.uuid, categoryName: category.categoryName)).watch();
   }
 
-  Stream<List<Todo>> watchTodos({
-    SortDirection sortDirection = SortDirection.descending,
-    TodoSort sort = TodoSort.recency,
-  }) {
+  Stream<List<Todo>> watchTodos({SortDirection sortDirection = SortDirection.descending, TodoSort sort = TodoSort.recency}) {
     final query = select(tblTodos).join([
       leftOuterJoin(tblTodoCategories, tblTodos.uuid.equalsExp(tblTodoCategories.todoUuid)),
       leftOuterJoin(tblCategories, tblTodoCategories.categoryUuid.equalsExp(tblCategories.uuid)),
@@ -168,13 +155,9 @@ class AppDatabase extends _$AppDatabase {
     if (category.uuid != null) return;
     final uuid = const Uuid().v4();
 
-    await into(tblCategories).insert(
-      TblCategoriesCompanion(
-        uuid: Value(uuid),
-        categoryName: Value(category.categoryName),
-        createdAt: Value(DateTime.now()),
-      ),
-    );
+    await into(
+      tblCategories,
+    ).insert(TblCategoriesCompanion(uuid: Value(uuid), categoryName: Value(category.categoryName), createdAt: Value(DateTime.now())));
 
     category.uuid = uuid;
   }
@@ -192,8 +175,7 @@ class AppDatabase extends _$AppDatabase {
 
   Future<void> deleteTodoByUuid(String todoUuid) async {
     await transaction(() async {
-      final deleteTodoCategoriesQuery = delete(tblTodoCategories)
-        ..where((tbl) => tbl.todoUuid.isValue(todoUuid));
+      final deleteTodoCategoriesQuery = delete(tblTodoCategories)..where((tbl) => tbl.todoUuid.isValue(todoUuid));
       await deleteTodoCategoriesQuery.go();
 
       final deleteTodoQuery = delete(tblTodos)..where((tbl) => tbl.uuid.isValue(todoUuid));

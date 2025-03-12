@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:workout/features/settings/presentation/providers/settings_cubit.dart';
-import 'package:workout/features/settings/presentation/states/settings.dart';
-import 'package:workout/core/components/buttons.dart';
-import 'package:workout/features/settings/presentation/screens/login_screen.dart';
-import 'package:workout/core/utils/flutter/utils.dart';
+import 'package:todo/features/settings/presentation/providers/settings_cubit.dart';
+import 'package:todo/features/settings/presentation/states/settings.dart';
+import 'package:todo/core/components/buttons.dart';
+import 'package:todo/features/settings/presentation/screens/login_screen.dart';
+import 'package:todo/core/utils/flutter/utils.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
