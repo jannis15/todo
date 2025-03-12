@@ -41,9 +41,9 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
   Widget build(BuildContext context) {
     AppBar buildTodoAppBar() => AppBar(
       toolbarHeight: 40,
-      actionsPadding: EdgeInsets.zero,
-      titleSpacing: 0,
+      titleSpacing: 8,
       title: Row(
+        spacing: 8,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Flexible(
@@ -113,7 +113,9 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
                 child: TextField(
                   controller: _categoryNameTextController,
                   style: const TextStyle(height: 24 / 16, fontSize: 16),
-                  maxLines: 1,
+                  maxLines: null,
+                  keyboardType: TextInputType.text,
+                  expands: true,
                   focusNode: _categoryNameFocusNode,
                   decoration: const InputDecoration(
                     isDense: true,
