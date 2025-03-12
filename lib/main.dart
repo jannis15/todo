@@ -14,14 +14,13 @@ import 'package:workout/features/todos/presentation/screens/todo_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load();
-
   final settingsService = SettingsCubit();
   await settingsService.loadSettings();
 
   await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL']!,
-    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+    url: 'https://mkparflvwnfgaeyolevq.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rcGFyZmx2d25mZ2FleW9sZXZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NjYxMjIsImV4cCI6MjA1NzE0MjEyMn0.EZlG0rvbU3x0ig9UHsu1mvPMw0WQmmSQ0m4lj5RC4I4',
   );
 
   if (!settingsService.state.isLoginInformationEmpty) {
