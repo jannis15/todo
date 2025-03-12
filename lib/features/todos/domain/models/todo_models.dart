@@ -2,6 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'todo_models.freezed.dart';
 
+part 'todo_models.g.dart';
+
 enum TodoSort {
   recency,
   creationDate,
@@ -15,6 +17,7 @@ enum TodoSort {
 }
 
 @freezed
+@JsonSerializable()
 class Todo with _$Todo {
   String? uuid;
   final String title;
@@ -31,13 +34,22 @@ class Todo with _$Todo {
     this.createdAt,
     this.editedAt,
   });
+
+  factory Todo.fromJson(Map<String, Object?> json) => _$TodoFromJson(json);
+
+  Map<String, Object?> toJson() => _$TodoToJson(this);
 }
 
 @freezed
+@JsonSerializable()
 class Category with _$Category {
   String? uuid;
   final String categoryName;
   final DateTime? createdAt;
 
   Category({this.uuid, required this.categoryName, this.createdAt});
+
+  factory Category.fromJson(Map<String, Object?> json) => _$CategoryFromJson(json);
+
+  Map<String, Object?> toJson() => _$CategoryToJson(this);
 }

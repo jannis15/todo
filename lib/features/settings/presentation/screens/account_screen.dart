@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:workout/core/components/buttons.dart';
+import 'package:workout/features/todos/data/repositories/cloud_repository.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -64,20 +65,24 @@ class _AccountScreenState extends State<AccountScreen> {
               iconData: Icons.sync,
               text: 'Synchronise',
               highlightType: HighlightType.secondary,
-              // onPressed: () {},
+              onPressed: () {
+                CloudRepository().syncAllTodos();
+              },
             ),
             TFilledButton(
               iconData: Icons.settings_backup_restore,
               text: 'Recover',
               highlightType: HighlightType.secondary,
-              // onPressed: () {},
+              onPressed: () {
+                CloudRepository().restoreTodos();
+              },
             ),
             TFilledButton(
               iconData: Icons.lock,
               text: 'Change password',
               highlightType: HighlightType.secondary,
               onPressed: () {
-                context.go('/new-password');
+                context.go('/account/new-password');
               },
             ),
           ],

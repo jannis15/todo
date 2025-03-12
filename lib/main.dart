@@ -43,7 +43,11 @@ class MyApp extends StatelessWidget {
         builder: (_, __) => const TodoScreen(),
         routes: [
           GoRoute(path: '/new-password', builder: (_, __) => const NewPasswordScreen()),
-          GoRoute(path: '/account', builder: (_, __) => const AccountScreen()),
+          GoRoute(
+            path: '/account',
+            builder: (_, __) => const AccountScreen(),
+            routes: [GoRoute(path: '/new-password', builder: (_, __) => const NewPasswordScreen())],
+          ),
           GoRoute(
             path: '/login',
             builder: (_, __) => const LoginScreen(),
