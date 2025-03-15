@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:todo/core/components/constrained_scaffold.dart';
 import 'package:todo/features/settings/presentation/providers/settings_cubit.dart';
 import 'package:todo/features/settings/presentation/states/settings.dart';
 import 'package:todo/core/components/buttons.dart';
-import 'package:todo/features/settings/presentation/screens/login_screen.dart';
 import 'package:todo/core/utils/flutter/utils.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -47,10 +47,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _registerOperation = CancelableOperation.fromFuture(
         Supabase.instance.client.auth.signUp(email: email, password: password),
       );
-      final response = await _registerOperation!.value;
+      await _registerOperation!.value;
       await context.read<SettingsCubit>().saveLoginInformation(
         LoginInformation(email: email, password: password),
       );
+      context.go('/login');
+    } on AuthException catch (e) {
+      _errorText = e.message;
+      if (mounted) setState(() {});
+      rethrow;
     } finally {
       if (mounted)
         setState(() {
@@ -69,8 +74,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(toolbarHeight: 40, title: const Text('Register')),
+    return ConstrainedScaffold(
+      title: const Text('Register'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8),
         child: Column(

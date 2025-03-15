@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo/core/components/buttons.dart';
+import 'package:todo/core/components/constrained_scaffold.dart';
 import 'package:todo/features/todos/data/repositories/cloud_repository.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -24,37 +25,33 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 40,
-        title: const Text('Account Settings'),
-        actionsPadding: const EdgeInsets.only(right: 8),
-        actions: [
-          TOutlinedButton(
-            tooltip: 'Logout',
-            iconData: Icons.logout,
-            loading: _isSaving,
-            onPressed: () async {
-              setState(() {
-                _isSaving = true;
-              });
-              try {
-                await _signOutOperation?.cancel();
-                _signOutOperation = CancelableOperation.fromFuture(
-                  Supabase.instance.client.auth.signOut(),
-                );
-                await _signOutOperation!.value;
-                if (mounted) context.go('/');
-              } finally {
-                if (mounted)
-                  setState(() {
-                    _isSaving = false;
-                  });
-              }
-            },
-          ),
-        ],
-      ),
+    return ConstrainedScaffold(
+      title: const Text('Account Settings'),
+      actions: [
+        TOutlinedButton(
+          tooltip: 'Logout',
+          iconData: Icons.logout,
+          loading: _isSaving,
+          onPressed: () async {
+            setState(() {
+              _isSaving = true;
+            });
+            try {
+              await _signOutOperation?.cancel();
+              _signOutOperation = CancelableOperation.fromFuture(
+                Supabase.instance.client.auth.signOut(),
+              );
+              await _signOutOperation!.value;
+              if (mounted) context.go('/');
+            } finally {
+              if (mounted)
+                setState(() {
+                  _isSaving = false;
+                });
+            }
+          },
+        ),
+      ],
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8),
         child: Column(

@@ -4,6 +4,7 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo/core/components/buttons.dart';
+import 'package:todo/core/components/constrained_scaffold.dart';
 
 class NewPasswordScreen extends StatefulWidget {
   const NewPasswordScreen({super.key});
@@ -31,8 +32,8 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(toolbarHeight: 40, title: const Text('Set a new password')),
+    return ConstrainedScaffold(
+      title: const Text('Set a new password'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8),
         child: Column(
@@ -44,7 +45,11 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               readOnly: !_isEnabled,
               controller: _passwordController,
               keyboardType: TextInputType.visiblePassword,
-              decoration: const InputDecoration(prefixIcon: Icon(Icons.lock), label: Text('Passwort'), border: OutlineInputBorder()),
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.lock),
+                label: Text('Passwort'),
+                border: OutlineInputBorder(),
+              ),
             ),
             TFilledButton(
               loading: _isLoading,
@@ -58,7 +63,9 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                           final newPassword = _passwordController.text;
                           _newPasswordOperation?.cancel();
                           _newPasswordOperation = CancelableOperation.fromFuture(
-                            Supabase.instance.client.auth.updateUser(UserAttributes(password: newPassword)),
+                            Supabase.instance.client.auth.updateUser(
+                              UserAttributes(password: newPassword),
+                            ),
                           );
                           await _newPasswordOperation!.value;
                           if (mounted) {

@@ -2,6 +2,7 @@ import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:todo/core/components/buttons.dart';
+import 'package:todo/core/components/constrained_scaffold.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -23,8 +24,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(toolbarHeight: 40, title: const Text('Forgot password?')),
+    return ConstrainedScaffold(
+      title: const Text('Forgot password?'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(8),
         child: Column(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:todo/core/components/404_screen.dart';
 import 'package:todo/features/settings/presentation/providers/settings_cubit.dart';
 import 'package:todo/features/settings/presentation/screens/account_screen.dart';
 import 'package:todo/features/settings/presentation/screens/forgot_password_screen.dart';
@@ -35,6 +36,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final SettingsCubit _settingsService;
   final GoRouter _router = GoRouter(
+    errorBuilder: (_, __) => const FileNotFoundScreen(),
     routes: [
       GoRoute(
         path: '/',
@@ -69,11 +71,14 @@ class MyApp extends StatelessWidget {
 
     return BlocProvider<SettingsCubit>.value(
       value: _settingsService,
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        theme: getThemeData(brightness: Brightness.light),
-        darkTheme: getThemeData(brightness: Brightness.dark),
-        routerConfig: _router,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          theme: getThemeData(brightness: Brightness.light),
+          darkTheme: getThemeData(brightness: Brightness.dark),
+          routerConfig: _router,
+        ),
       ),
     );
   }

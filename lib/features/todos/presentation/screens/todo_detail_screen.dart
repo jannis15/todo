@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo/config/config.dart';
+import 'package:todo/core/components/constrained_scaffold.dart';
 import 'package:todo/features/todos/data/sources/drift/database.dart';
 import 'package:todo/features/todos/domain/models/todo_models.dart';
 import 'package:todo/core/components/chip.dart';
@@ -39,62 +41,6 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AppBar buildTodoAppBar() => AppBar(
-      toolbarHeight: 40,
-      titleSpacing: 8,
-      title: Row(
-        spacing: 8,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Flexible(
-            child:
-                _isEditingTitle
-                    ? TextField(
-                      focusNode: _titleFocusNode,
-                      decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        hintText: 'Title',
-                      ),
-                      style: textTheme.titleLarge,
-                      controller: _titleTextController,
-                    )
-                    : GestureDetector(
-                      onTap: () {
-                        _isEditingTitle = true;
-                        setState(() {});
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          _titleFocusNode.requestFocus();
-                        });
-                      },
-                      child: Text(
-                        _titleTextController.text.isEmpty ? 'Title' : _titleTextController.text,
-                      ),
-                    ),
-          ),
-          if (!_isEditingTitle)
-            IconButton(
-              onPressed: () {
-                _isEditingTitle = true;
-                setState(() {});
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  _titleFocusNode.requestFocus();
-                });
-              },
-              icon: const Icon(Icons.edit),
-            )
-          else
-            IconButton(
-              onPressed: () async {
-                _titleFocusNode.unfocus();
-                _isEditingTitle = false;
-                setState(() {});
-              },
-              icon: const Icon(Icons.check),
-            ),
-        ],
-      ),
-    );
-
     Widget buildNewCategoryRow() => AnimatedContainer(
       height: _isEditingNewCategory ? 40 : 0,
       clipBehavior: Clip.hardEdge,
@@ -342,21 +288,76 @@ class _TodoDetailScreenState extends State<TodoDetailScreen> {
           Navigator.of(context).pop();
         }
       },
-      child: Scaffold(
-        appBar: buildTodoAppBar(),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: ConstrainedScaffold(
+        title: Row(
+          spacing: 8,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            buildNewCategoryRow(),
-            buildCategoriesRow(),
-            const SizedBox(height: 8),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
-                child: buildContentTextField(),
-              ),
+            Flexible(
+              child:
+                  _isEditingTitle
+                      ? TextField(
+                        focusNode: _titleFocusNode,
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          hintText: 'Title',
+                        ),
+                        style: textTheme.titleLarge,
+                        controller: _titleTextController,
+                      )
+                      : GestureDetector(
+                        onTap: () {
+                          _isEditingTitle = true;
+                          setState(() {});
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _titleFocusNode.requestFocus();
+                          });
+                        },
+                        child: Text(
+                          _titleTextController.text.isEmpty ? 'Title' : _titleTextController.text,
+                        ),
+                      ),
             ),
+            if (!_isEditingTitle)
+              IconButton(
+                onPressed: () {
+                  _isEditingTitle = true;
+                  setState(() {});
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _titleFocusNode.requestFocus();
+                  });
+                },
+                icon: const Icon(Icons.edit),
+              )
+            else
+              IconButton(
+                onPressed: () async {
+                  _titleFocusNode.unfocus();
+                  _isEditingTitle = false;
+                  setState(() {});
+                },
+                icon: const Icon(Icons.check),
+              ),
           ],
+        ),
+        body: Center(
+          child: SizedBox(
+            width: AppSizes.kDesktopWidth,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                buildNewCategoryRow(),
+                buildCategoriesRow(),
+                const SizedBox(height: 8),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+                    child: buildContentTextField(),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

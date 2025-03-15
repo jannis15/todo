@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago_flutter/timeago_flutter.dart';
+import 'package:todo/core/components/constrained_scaffold.dart';
 import 'package:todo/features/todos/data/sources/drift/database.dart';
 import 'package:todo/features/todos/domain/models/todo_models.dart';
 import 'package:todo/core/components/buttons.dart';
@@ -43,6 +44,16 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void pushNewTodoDetailScreen() =>
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TodoDetailScreen()));
+
+    Future<AlertOption?> showDismissTodoDialog(Todo todo) async => showAlertDialog(
+      context,
+      title: "Delete ${todo.title.trim().isNotEmpty ? '${todo.title}' : 'Todo'}?",
+      content: 'You are about to delete this todo. This action cannot be undone.',
+      optionData: [AlertOptionData.yes(), AlertOptionData.cancel()],
+    );
+
     Widget buildSearchBar(BuildContext context, TodoLoadedState todoState) => Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -85,6 +96,12 @@ class _TodoScreenState extends State<TodoScreen> {
             child: Row(
               spacing: 6,
               children: [
+                if (useDesktopLayout)
+                  TFilledButton(
+                    iconData: Icons.add,
+                    text: 'Add',
+                    onPressed: pushNewTodoDetailScreen,
+                  ),
                 SizedBox(
                   height: 32,
                   child: FilledButton.tonalIcon(
@@ -143,6 +160,12 @@ class _TodoScreenState extends State<TodoScreen> {
                             context,
                           ).push(MaterialPageRoute(builder: (_) => TodoDetailScreen(todo: todo)));
                         },
+                        onLongPress: () async {
+                          final alertResult = await showDismissTodoDialog(todo);
+                          if (alertResult == AlertOption.yes) {
+                            await AppDatabase().deleteTodoByUuid(todo.uuid!);
+                          }
+                        },
                         child: Dismissible(
                           direction: DismissDirection.endToStart,
                           key: UniqueKey(),
@@ -155,14 +178,7 @@ class _TodoScreenState extends State<TodoScreen> {
                             ),
                           ),
                           confirmDismiss: (direction) async {
-                            final alertResult = await showAlertDialog(
-                              context,
-                              title:
-                                  "Delete ${todo.title.trim().isNotEmpty ? '${todo.title}' : 'Todo'}?",
-                              content:
-                                  'You are about to delete this todo. This action cannot be undone.',
-                              optionData: [AlertOptionData.yes(), AlertOptionData.cancel()],
-                            );
+                            final alertResult = await showDismissTodoDialog(todo);
                             if (alertResult == AlertOption.yes) {
                               await AppDatabase().deleteTodoByUuid(todo.uuid!);
                               return true;
@@ -239,9 +255,7 @@ class _TodoScreenState extends State<TodoScreen> {
     Widget buildFloatingActionButton() => FloatingActionButton.extended(
       icon: const Icon(Icons.add),
       label: const Text('Add'),
-      onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => const TodoDetailScreen()));
-      },
+      onPressed: pushNewTodoDetailScreen,
     );
 
     return BlocProvider(
@@ -252,31 +266,38 @@ class _TodoScreenState extends State<TodoScreen> {
               stream: _authStream,
               builder: (context, authState) {
                 bool isSignedIn = !(authState.data?.session?.isExpired ?? true);
-                return Scaffold(
-                  appBar: AppBar(
-                    actionsPadding: const EdgeInsets.only(right: 8),
-                    toolbarHeight: 40,
-                    title: const Text('Todos'),
-                    actions: [
-                      if (isSignedIn)
-                        TOutlinedButton(
-                          iconData: Icons.person,
-                          text: Supabase.instance.client.auth.currentUser?.email,
-                          onPressed: () => context.go('/account'),
-                        )
-                      else
-                        TOutlinedButton(
-                          iconData: null,
-                          text: 'Login',
-                          onPressed: () => context.go('/login'),
+                return ConstrainedScaffold(
+                  title: Row(
+                    spacing: 8,
+                    children: [
+                      IgnorePointer(
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.menu_book, color: colorScheme.secondary),
                         ),
+                      ),
+                      const Text('Todos'),
                     ],
                   ),
-                  floatingActionButton: buildFloatingActionButton(),
+                  actions: [
+                    if (isSignedIn)
+                      TOutlinedButton(
+                        iconData: Icons.person,
+                        text: Supabase.instance.client.auth.currentUser?.email,
+                        onPressed: () => context.go('/account'),
+                      )
+                    else
+                      TOutlinedButton(
+                        iconData: null,
+                        text: 'Login',
+                        onPressed: () => context.go('/login'),
+                      ),
+                  ],
                   body:
                       todoState is TodoLoadedState
                           ? buildLoadedBody(context, todoState)
                           : const Center(child: CircularProgressIndicator()),
+                  floatingActionButton: useDesktopLayout ? null : buildFloatingActionButton(),
                 );
               },
             ),
