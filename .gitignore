@@ -1,4 +1,5 @@
 # git files
+.firebase
 .env
 .env.local
 
